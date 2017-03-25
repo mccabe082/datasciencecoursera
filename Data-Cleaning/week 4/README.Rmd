@@ -1,0 +1,28 @@
+## Repo Content Summary
+
+This Repo contains a script which produces a tidy custom version of the "Human Activity Recognition Using Smartphones Dataset" created by the good people at smartlab.
+
+### ./UCI HAR Dataset/
+The "Human Activity Recognition Using Smartphones Dataset" data was downloaded on Sat Mar 25 2017 from here <https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip>.
+The raw data that was extracted from the .zip file is provided in the *./UCI HAR Dataset/* directory.
+a description for this raw dataset can be found by reading the *./UCI HAR Dataset/README.txt*.
+
+
+### ./run_analysis.R
+The *run_analysis.R* combines all of the following into single data.table called **d**, the following sequence of operations have been performed to create the clean dataset:
+
+1. Collected and processed activity label data
+    + test data activity labels combined with train data activity labels
+    + descriptive activity names added instead of integer/numerical flags
+2. Collected and processed feature variable data
+    + test data feature variables combined with train data feature variables
+    + duplicate feature variable names (all occur in threes) have been tagged with X', Y' and Z'. 
+3. Activity labels merged with their corresponding feature variables
+4. Feature variables in the raw dataset whose names do not contain the strings "mean" or "std" are excluded from d
+
+A supplementary **meanSummary** datastructure is also provided.  This shows the mean value of each feature variable for each different form of activity.  e.g. ...
+
+```{r cars}
+source("run_analysis.R")
+meanSummary[3] # mean(tBodyAcc-mean()-Y)
+```
