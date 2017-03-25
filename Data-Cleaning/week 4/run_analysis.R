@@ -83,14 +83,24 @@
       input = "./UCI HAR Dataset/test/X_test.txt"
       ,col.names = featureKey$label
     )
+    subjectTest<-fread(
+            "./UCI HAR Dataset/test/subject_test.txt"
+            ,col.names = c("subject")
+    )
+    xtest<-cbind(subjectTest,xtest)
+    
     xtrain<-fread(
       input = "./UCI HAR Dataset/train/X_train.txt"
       ,col.names = featureKey$label
     )
-    
+    subjectTrain<-fread(
+            "./UCI HAR Dataset/train/subject_train.txt"
+            ,col.names = c("subject")
+    )
+    xtrain<-cbind(subjectTrain,xtrain)
     x<-rbind(xtest,xtrain)
     
-    rm(featureKey,tagMatches,xtest,xtrain)
+    rm(featureKey,tagMatches,xtest,xtrain,subjectTrain,subjectTest)
     
   }
   
@@ -109,28 +119,16 @@
 {
   #2. Extracts only the measurements on the mean and standard deviation for each measurement
   {
-    surplusColumns<-names(d)[!grepl("(activity|mean|std)", names(d), perl=TRUE)]
+    surplusColumns<-names(d)[!grepl("(activity|subject|mean|std)", names(d), perl=TRUE)]
     d[,(surplusColumns) := NULL]
     rm(surplusColumns)
   }
   
   #5.creates a secondindependent tidy data set showing each variables average for each activity
-  {
-    
-    meanSummary<-ddply(d,"activity", function(x) {
-      res<-data.frame(
-        matrix(
-          data=colMeans(x[,2:length(x)]),
-          ncol = length(x)-1,
-          nrow = 1
-        )
-      )
-      colnames(res) <- paste0("mean(",names(x)[2:length(x)],")")
-      return(res)
-    })
-    
-    rownames(meanSummary)<-meanSummary$activity
-  }
+  id_labels = c("subject", "activity")
+  data_labels = setdiff(colnames(d), id_labels)
+  melt_d = melt(d, id.vars = id_labels, measure.vars = data_labels)
+  meanSummary <- dcast(melt_d, subject + activity ~ variable, mean)
   
 }
 
