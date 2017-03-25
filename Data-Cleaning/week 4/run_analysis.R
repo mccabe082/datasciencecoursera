@@ -97,10 +97,7 @@
   
   # Merge activity classification labels with the feature data
   {
-    x[,"ordinal"] <- seq(1,nrow(x))
-    y[,"ordinal"] <- seq(1,nrow(y))
-    d<-merge(y,x,by=c("ordinal"),all=T)
-    d[,ordinal:=NULL]
+    d<-cbind(y,x)
     rm(x,y)
   }
 }
@@ -137,3 +134,4 @@
   
 }
 
+write.table(meanSummary,file="meanSummary.txt",col.names = FALSE, row.names = FALSE)

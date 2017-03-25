@@ -1,0 +1,248 @@
+## Data Dictionary
+
+### activity []
+activity classification;
+- WALKING
+- WALKING_UPSTAIRS
+- WALKING_DOWNSTAIRS
+- SITTING
+- STANDING
+- LAYING
+
+### tBodyAcc-mean()-X [unknown]:
+ mean tBodyAcc in X direction
+
+### tBodyAcc-mean()-Y [unknown]:
+ mean tBodyAcc in Y direction
+
+### tBodyAcc-mean()-Z [unknown]:
+ mean tBodyAcc in Z direction
+
+### tBodyAcc-std()-X [unknown]:
+ standard deviation of tBodyAcc in X direction
+
+### tBodyAcc-std()-Y [unknown]:
+ standard deviation of tBodyAcc in Y direction
+
+### tBodyAcc-std()-Z [unknown]:
+ standard deviation of tBodyAcc in Z direction
+
+### tGravityAcc-mean()-X [unknown]:
+ mean tGravityAcc in X direction
+
+### tGravityAcc-mean()-Y [unknown]:
+ mean tGravityAcc in Y direction
+
+### tGravityAcc-mean()-Z [unknown]:
+ mean tGravityAcc in Z direction
+
+### tGravityAcc-std()-X [unknown]:
+ standard deviation of tGravityAcc in X direction
+
+### tGravityAcc-std()-Y [unknown]:
+ standard deviation of tGravityAcc in Y direction
+
+### tGravityAcc-std()-Z [unknown]:
+ standard deviation of tGravityAcc in Z direction
+
+### tBodyAccJerk-mean()-X [unknown]:
+ mean tBodyAccJerk in X direction
+
+### tBodyAccJerk-mean()-Y [unknown]:
+ mean tBodyAccJerk in Y direction
+
+### tBodyAccJerk-mean()-Z [unknown]:
+ mean tBodyAccJerk in Z direction
+
+### tBodyAccJerk-std()-X [unknown]:
+ standard deviation of tBodyAccJerk in X direction
+
+### tBodyAccJerk-std()-Y [unknown]:
+ standard deviation of tBodyAccJerk in Y direction
+
+### tBodyAccJerk-std()-Z [unknown]:
+ standard deviation of tBodyAccJerk in Z direction
+
+### tBodyGyro-mean()-X [unknown]:
+ mean tBodyGyro in X direction
+
+### tBodyGyro-mean()-Y [unknown]:
+ mean tBodyGyro in Y direction
+
+### tBodyGyro-mean()-Z [unknown]:
+ mean tBodyGyro in Z direction
+
+### tBodyGyro-std()-X [unknown]:
+ standard deviation of tBodyGyro in X direction
+
+### tBodyGyro-std()-Y [unknown]:
+ standard deviation of tBodyGyro in Y direction
+
+### tBodyGyro-std()-Z [unknown]:
+ standard deviation of tBodyGyro in Z direction
+
+### tBodyGyroJerk-mean()-X [unknown]:
+ mean tBodyGyroJerk in X direction
+
+### tBodyGyroJerk-mean()-Y [unknown]:
+ mean tBodyGyroJerk in Y direction
+
+### tBodyGyroJerk-mean()-Z [unknown]:
+ mean tBodyGyroJerk in Z direction
+
+### tBodyGyroJerk-std()-X [unknown]:
+ standard deviation of tBodyGyroJerk in X direction
+
+### tBodyGyroJerk-std()-Y [unknown]:
+ standard deviation of tBodyGyroJerk in Y direction
+
+### tBodyGyroJerk-std()-Z [unknown]:
+ standard deviation of tBodyGyroJerk in Z direction
+
+### tBodyAccMag-mean() [unknown]:
+ mean tBodyAccMag
+
+### tBodyAccMag-std() [unknown]:
+ standard deviation of tBodyAccMag
+
+### tGravityAccMag-mean() [unknown]:
+ mean tGravityAccMag
+
+### tGravityAccMag-std() [unknown]:
+ standard deviation of tGravityAccMag
+
+### tBodyAccJerkMag-mean() [unknown]:
+ mean tBodyAccJerkMag
+
+### tBodyAccJerkMag-std() [unknown]:
+ standard deviation of tBodyAccJerkMag
+
+### tBodyGyroMag-mean() [unknown]:
+ mean tBodyGyroMag
+
+### tBodyGyroMag-std() [unknown]:
+ standard deviation of tBodyGyroMag
+
+### tBodyGyroJerkMag-mean() [unknown]:
+ mean tBodyGyroJerkMag
+
+### tBodyGyroJerkMag-std() [unknown]:
+ standard deviation of tBodyGyroJerkMag
+
+### fBodyAcc-mean()-X [unknown]:
+ mean fBodyAcc in X direction
+
+### fBodyAcc-mean()-Y [unknown]:
+ mean fBodyAcc in Y direction
+
+### fBodyAcc-mean()-Z [unknown]:
+ mean fBodyAcc in Z direction
+
+### fBodyAcc-std()-X [unknown]:
+ standard deviation of fBodyAcc in X direction
+
+### fBodyAcc-std()-Y [unknown]:
+ standard deviation of fBodyAcc in Y direction
+
+### fBodyAcc-std()-Z [unknown]:
+ standard deviation of fBodyAcc in Z direction
+
+### fBodyAcc-meanFreq()-X [unknown]:
+ mean fBodyAcc in X direction
+
+### fBodyAcc-meanFreq()-Y [unknown]:
+ mean fBodyAcc in Y direction
+
+### fBodyAcc-meanFreq()-Z [unknown]:
+ mean fBodyAcc in Z direction
+
+### fBodyAccJerk-mean()-X [unknown]:
+ mean fBodyAccJerk in X direction
+
+### fBodyAccJerk-mean()-Y [unknown]:
+ mean fBodyAccJerk in Y direction
+
+### fBodyAccJerk-mean()-Z [unknown]:
+ mean fBodyAccJerk in Z direction
+
+### fBodyAccJerk-std()-X [unknown]:
+ standard deviation of fBodyAccJerk in X direction
+
+### fBodyAccJerk-std()-Y [unknown]:
+ standard deviation of fBodyAccJerk in Y direction
+
+### fBodyAccJerk-std()-Z [unknown]:
+ standard deviation of fBodyAccJerk in Z direction
+
+### fBodyAccJerk-meanFreq()-X [unknown]:
+ mean fBodyAccJerk in X direction
+
+### fBodyAccJerk-meanFreq()-Y [unknown]:
+ mean fBodyAccJerk in Y direction
+
+### fBodyAccJerk-meanFreq()-Z [unknown]:
+ mean fBodyAccJerk in Z direction
+
+### fBodyGyro-mean()-X [unknown]:
+ mean fBodyGyro in X direction
+
+### fBodyGyro-mean()-Y [unknown]:
+ mean fBodyGyro in Y direction
+
+### fBodyGyro-mean()-Z [unknown]:
+ mean fBodyGyro in Z direction
+
+### fBodyGyro-std()-X [unknown]:
+ standard deviation of fBodyGyro in X direction
+
+### fBodyGyro-std()-Y [unknown]:
+ standard deviation of fBodyGyro in Y direction
+
+### fBodyGyro-std()-Z [unknown]:
+ standard deviation of fBodyGyro in Z direction
+
+### fBodyGyro-meanFreq()-X [unknown]:
+ mean fBodyGyro in X direction
+
+### fBodyGyro-meanFreq()-Y [unknown]:
+ mean fBodyGyro in Y direction
+
+### fBodyGyro-meanFreq()-Z [unknown]:
+ mean fBodyGyro in Z direction
+
+### fBodyAccMag-mean() [unknown]:
+ mean fBodyAccMag
+
+### fBodyAccMag-std() [unknown]:
+ standard deviation of fBodyAccMag
+
+### fBodyAccMag-meanFreq() [unknown]:
+ mean frequency of fBodyAccMag
+
+### fBodyBodyAccJerkMag-mean() [unknown]:
+ mean fBodyBodyAccJerkMag
+
+### fBodyBodyAccJerkMag-std() [unknown]:
+ standard deviation of fBodyBodyAccJerkMag
+
+### fBodyBodyAccJerkMag-meanFreq() [unknown]:
+ mean frequency of fBodyBodyAccJerkMag
+
+### fBodyBodyGyroMag-mean() [unknown]:
+ mean fBodyBodyGyroMag
+
+### fBodyBodyGyroMag-std() [unknown]:
+ standard deviation of fBodyBodyGyroMag
+
+### fBodyBodyGyroMag-meanFreq() [unknown]:
+ mean frequency of fBodyBodyGyroMag
+
+### fBodyBodyGyroJerkMag-mean() [unknown]:
+ mean fBodyBodyGyroJerkMag
+
+### fBodyBodyGyroJerkMag-std() [unknown]:
+ standard deviation of fBodyBodyGyroJerkMag
+
+### fBodyBodyGyroJerkMag-meanFreq() [unknown]:
+ mean frequency of fBodyBodyGyroJerkMag
+
