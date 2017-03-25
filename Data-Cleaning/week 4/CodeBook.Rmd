@@ -9,6 +9,9 @@ activity classification;
 - STANDING
 - LAYING
 
+### subject []
+subject
+
 ### tBodyAcc-mean()-X [unknown]:
  mean tBodyAcc in X direction
 

@@ -20,9 +20,9 @@ The *run_analysis.R* combines all of the following into single data.table called
 3. Activity labels merged with their corresponding feature variables
 4. Feature variables in the raw dataset whose names do not contain the strings "mean" or "std" are excluded from d
 
-A supplementary **meanSummary** datastructure is also provided.  This shows the mean value of each feature variable for each different form of activity.  e.g. ...
+A supplementary **meanSummary** datastructure is also provided.  This shows the mean value of each feature variable for each different form of activity for each individual subject.  e.g. ...
 
-```{r cars}
+```{r meanSummary example}
 source("run_analysis.R")
-meanSummary[3] # mean(tBodyAcc-mean()-Y)
+meanSummary[meanSummary$subject==3,c('activity','tBodyAcc-mean()-Y')]
 ```
