@@ -16,7 +16,8 @@ output: html_document
 - - - [similarity](https://en.wikipedia.org/wiki/Pearson_correlation_coefficient)
 - - - [binary](https://en.wikipedia.org/wiki/Taxicab_geometry)
 - - A merging approach
-- - - e.g. take the midpoint
+- - - Averaging - take the midpoint/centroid
+- - - Complete - take the distance between the farthest pair in each cluster
 - Produces
 -- A tree showing the mutual proximity of all the points
 
@@ -62,4 +63,11 @@ dendro[[2]][[2]] = dendrapply(dendro[[2]][[2]], colbranches, "red")
 dendro[[1]] = dendrapply(dendro[[1]], colbranches, "blue")
 
 plot(dendro)
+```
+
+##### Heatmap
+
+```{r}
+dataMatrix<-as.matrix(dt)[sample(1:12),]
+heatmap(dataMatrix)
 ```
