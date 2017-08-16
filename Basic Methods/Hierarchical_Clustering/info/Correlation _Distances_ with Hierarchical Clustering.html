@@ -1,0 +1,364 @@
+
+<!-- saved from url=(0073)http://research.stowers.org/mcm/efg/R/Visualization/cor-cluster/index.htm -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+
+<meta name="Generator" content="Microsoft Word 10 (filtered)">
+<title>Correlation "Distances" with Hierarchical Clustering</title>
+
+<style>
+<!--
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman";}
+p.MsoHeader, li.MsoHeader, div.MsoHeader
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman";}
+p.MsoFooter, li.MsoFooter, div.MsoFooter
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman";}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:.8in .8in .8in .8in;}
+div.Section1
+	{page:Section1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+
+</head>
+
+<body background="./Correlation _Distances_ with Hierarchical Clustering_files/background.gif" link="blue" vlink="purple" lang="EN-US">
+
+<div class="Section1">
+
+  <p align="center" class="MsoNormal"><i><font size="4"><i><font color="#0000FF" size="3" face="Arial"><a href="http://research.stowers.org/mcm/efg/index.html">efg's Research Notes</a>:</font><font face="Arial" color="#0000FF">&nbsp; </font></i></font><font color="#0000FF" size="3" face="Arial"><a href="http://research.stowers.org/mcm/efg/R/index.htm">R TechNotes and Graphics Gallery</a> </font></i></p>
+  <table border="0" align="center" cellpadding="0" cellspacing="0">
+    <tbody><tr>
+      <td width="74"><img src="./Correlation _Distances_ with Hierarchical Clustering_files/cor-cluster.gif" width="98" height="98"></td>
+      <td width="263"><div align="center"><span class="MsoNormal"><i><i><font color="#0000FF" size="5" face="Arial">Correlation "Distances" and <br>
+        Hierarchical Clustering </font></i></i></span></div></td>
+    </tr>
+    <tr>
+      <td colspan="2"><div align="center"></div>
+        <p align="center" class="MsoNormal">Earl F. Glynn<br>
+        Stowers Institute for Medical Research <br>
+        29 Dec 2005 <br>
+        </p></td>
+    </tr>
+  </tbody></table>
+  <p align="center" class="MsoNormal">&nbsp;</p>
+  <p align="center" class="MsoNormal"><font size="4" face="Arial, Helvetica, sans-serif"><a href="http://research.stowers.org/mcm/efg/R/Visualization/cor-cluster/ColorChart.pdf"></a></font></p>
+  <table width="600" align="center" cellpadding="1" cellspacing="1">
+    <tbody><tr>
+      <td><p><b>Purpose<br>
+      </b>There are many ways to perform hierarchical clustering in R, but a "controlled" experiment may be useful in understanding which methods  may be more useful when analyzing experimental data.&nbsp; This Technote explains an R experiment where data with "known" correlations are analyzed to create a hierarchical clustering. Some of the results presented here should be useful in analyzing experimental data when the "answer" is not known.</p>
+        <p><strong>Background</strong><br>
+          Creating random values in R is easy with its various random number generators.&nbsp; We could create completely random data to analyze, but the approach here is to create pairs of data variables with known correlations ranging from 0.0 (completely uncorrelated) to 1.0 (complete correlated).&nbsp; Actually, the correlation range from -1.0 to +1.0 will be spanned by picking pairs of values with these correlations:&nbsp; 0.0, -0.20, +0.40, -0.60, +0.80, -1.00.&nbsp; How can random values with known correlations be computed?</p>
+        <p><strong>Step-by-Step Instructions</strong></p>
+        <p>A recent posting by Robin Hankin to the <a href="http://cran.r-project.org/doc/Rnews/">R-News</a> mailing list provided some details.&nbsp; The <font size="2" face="Courier New, Courier, mono">CorrelatedXY</font> function below creates the specified pairs, N, of normal random values with given mean and variance, but with a specified correlation, too:</p>
+        <blockquote>
+          <p><font size="2" face="Courier New, Courier, mono">library(mvtnorm)</font></p>
+          <p><font size="2" face="Courier New, Courier, mono"># Based on R-News posting by Robin Hankin, 16 Dec 2005<br>
+            # <a href="http://tolstoy.newcastle.edu.au/R/help/05/12/17693.html">http://tolstoy.newcastle.edu.au/R/help/05/12/17693.html</a><br>
+            CorrelatedXY &lt;- function(N, mean1,mean2, <br>
+       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; variance1,variance2, <br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; correlation)<br>
+            {<br>
+       &nbsp; corvar &lt;- correlation * sqrt(variance1*variance2)<br>
+ &nbsp; rmvnorm(n=N,mean=c(mean1,mean2),<br>
+ &nbsp; sigma=matrix(c(variance1, corvar,<br>
+ &nbsp; corvar, variance2), 2,2))<br>
+      }
+          </font></p>
+        </blockquote>        
+        <p>Let's now create six sets of correlated, normally-distributed values with these parameters: </p>
+        <blockquote>
+        <p><font size="2" face="Courier New, Courier, mono">N &lt;- 1000<br>
+          mean1 &lt;- 2<br>
+          mean2 &lt;- 5<br>
+          variance1 &lt;- 1<br>
+          variance2 &lt;- 2</font></p>
+        </blockquote>
+        <p>Let's set this random number seed so this experiment is repeatable. </p>
+        <blockquote>
+          <p><font size="2" face="Courier New, Courier, mono">set.seed(17)</font></p>
+        </blockquote>
+        <p>The following may seem a bit obscure but is not.&nbsp; The <font size="2" face="Courier New, Courier, mono">Raw</font> matrix is initialized to be N pairs of random values that have correlation 0.0 with each other.&nbsp; The <font face="Courier New, Courier, mono">for loop</font> then adds another N pairs of random values (using <font face="Courier New, Courier, mono">cbind</font>) as columns to the matrix.&nbsp; The sets   have the approximate correlations:&nbsp; -0.2, +0.4, -0.6, +0.8, -1.0:</p>
+        <blockquote>
+          <p><font size="2" face="Courier New, Courier, mono">Raw &lt;- CorrelatedXY(N, mean1, mean2, variance1, variance2, 0.0)<br>
+            for (i in 1:5)<br>
+            {<br>
+       &nbsp; Raw &lt;- cbind(Raw, CorrelatedXY(N, mean1, mean2, <br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; variance1, variance2,<br>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (-1)^i * 0.2*i) )<br>
+            </font><font size="2" face="Courier New, Courier, mono">}</font></p>
+        </blockquote>
+        <p>Column names are assigned to the <font face="Courier New, Courier, mono">Raw</font> data matrix.&nbsp; The prefix "P" is for "Plus" and "M" is for "Minus" correlation.&nbsp; The value 00 means a correlation of 0.0, the value 02 means a correlation of 0.2, ..., the value 10 means a correlation of 1.0. The "A" and "B" suffixes are used to distinguish the pair of values in each set:
+        </p>
+        <blockquote>
+        <p><font size="2" face="Courier New, Courier, mono">            colnames(Raw) &lt;- paste(rep(c("P", "P", "M", "M"), 3),<br>
+&nbsp; sprintf("%2.2d", c(0,0,2,2,4,4,6,6,8,8,10,10)),<br>
+&nbsp; rep( c("A", "B"), 6), sep="")             </font></p>
+        </blockquote></td>
+    </tr>
+  </tbody></table>
+  <p class="MsoNormal">&nbsp;</p>
+  <table width="646" border="1" align="center" cellpadding="1" cellspacing="1">
+    <tbody><tr>
+      <td width="640">
+	  <pre><font color="#FF0000"># Look at correlation matrix<br>&gt; round( cor(Raw), 4)      </font>                                                                
+        P00A    P00B    M02A    M02B    P04A    P04B    M06A    M06B    P08A    P08B    M10A    M10B
+P00A  1.0000  <strong>0.0322</strong> -0.0054 -0.0258 -0.0247  0.0102 -0.0159  0.0163 -0.0279 -0.0248  0.0150 -0.0150
+P00B  <strong>0.0322</strong>  1.0000 -0.0349 -0.0052  0.0072  0.0231  0.0107  0.0088 -0.0303 -0.0299  0.0397 -0.0397
+M02A -0.0054 -0.0349  1.0000 <strong>-0.2106</strong> -0.0145  0.0125 -0.0175 -0.0124  0.0135  0.0283 -0.0246  0.0246
+M02B -0.0258 -0.0052 <strong>-0.2106</strong>  1.0000  0.0740  0.0145  0.0479 -0.0402  0.0252  0.0327  0.0292 -0.0292
+P04A -0.0247  0.0072 -0.0145  0.0740  1.0000  <strong>0.3925</strong>  0.0734 -0.0272 -0.0184 -0.0048 -0.0231  0.0231
+P04B  0.0102  0.0231  0.0125  0.0145  <strong>0.3925</strong>  1.0000  0.0340 -0.0367 -0.0452 -0.0329  0.0229 -0.0229
+M06A -0.0159  0.0107 -0.0175  0.0479  0.0734  0.0340  1.0000 <strong>-0.5693</strong>  0.0201 -0.0280  0.0084 -0.0084
+M06B  0.0163  0.0088 -0.0124 -0.0402 -0.0272 -0.0367 <strong>-0.5693</strong>  1.0000 -0.0400  0.0093 -0.0168  0.0168
+P08A -0.0279 -0.0303  0.0135  0.0252 -0.0184 -0.0452  0.0201 -0.0400  1.0000  <strong>0.7842</strong>  0.0278 -0.0278
+P08B -0.0248 -0.0299  0.0283  0.0327 -0.0048 -0.0329 -0.0280  0.0093  <strong>0.7842</strong>  1.0000  0.0475 -0.0475
+M10A  0.0150  0.0397 -0.0246  0.0292 -0.0231  0.0229  0.0084 -0.0168  0.0278  0.0475  1.0000 <strong>-1.0000</strong>
+M10B -0.0150 -0.0397  0.0246 -0.0292  0.0231 -0.0229 -0.0084  0.0168 -0.0278 -0.0475 <strong>-1.0000</strong>  1.0000 </pre>
+	 
+      
+	  </td>
+    </tr>
+  </tbody></table>
+  <p align="center" class="MsoNormal">&nbsp;</p>
+  <table width="621" align="center" cellpadding="1" cellspacing="1">
+    <tbody><tr>
+      <td width="615"><p>The values in bold above show the assigned correlation values are approximately correct and the rest of the data is not correlated:</p>
+        <p>A "map" of the correlation matrix can be created by assigning a color to each cell of the matrix:</p>
+        <blockquote>
+          <p><font size="2" face="Courier New, Courier, mono">corRaw &lt;- cor(Raw)<br>
+library(<a href="http://www.spatstat.org/">spatstat</a>) # "im" function            <br>
+  plot(im(corRaw[nrow(corRaw):1,]), main="Correlation Matrix Map")</font><br>
+           </p>
+      </blockquote></td>
+    </tr>
+  </tbody></table>
+  <p align="center" class="MsoNormal">&nbsp;</p>
+  <p align="center" class="MsoNormal">&nbsp;</p>
+  <p align="center" class="MsoNormal"><img src="./Correlation _Distances_ with Hierarchical Clustering_files/cor-clust001.png" width="432" height="405" border="1"></p>
+  <table width="600" align="center" cellpadding="1" cellspacing="1">
+    <tbody><tr>
+      <td width="660"><p>&nbsp;<br>
+        Several methods of "dissimilarity" were explored to see if one method is "better" in some way over the other methods:</p>
+        <ul>
+          <li>Dissimilarity = 1 - Correlation</li>
+          <li>Dissimilarity = (1 - Correlation)/2</li>
+          <li>Dissimilarity = 1 - Abs(Correlation)</li>
+          <li>Dissimilarity = Sqrt(1 - Correlation<sup>2</sup>)</li>
+        </ul>        
+        <p>The 1st, 3rd and 4th methods above were suggested in a Dec 28 posting to R-Help.&nbsp; The 2nd method is suggested as part of R's <font face="Courier New, Courier, mono">?dist</font> help, which is likely used to rescale the 1st method to always have values from 0.0 to 1.0 instead of 0.0 to 2.0. </p>
+        <p>Here's the R code that creates a distance matrix from <font size="2" face="Courier New, Courier, mono">1-Correlation</font> as the dissimilarity index:</p>
+        <blockquote>
+          <p><font size="2" face="Courier New, Courier, mono">dissimilarity &lt;- 1 - cor(Raw)<br>
+      distance &lt;- as.dist(dissimilarity) 
+          </font></p>
+        </blockquote>        
+        <p>Note the <font size="2" face="Courier New, Courier, mono">as.dist</font> function is used here to assign the correlation values to be "distances".&nbsp; (In some cases, you may want to use the <font size="2" face="Courier New, Courier, mono">dist</font> function to compute distances using a variety of distance metrics instead.) <br>
+          <br>
+          </p></td>
+    </tr>
+  </tbody></table>
+  
+  <table width="646" border="1" align="center" cellpadding="1" cellspacing="1">
+    <tbody><tr>
+      <td width="640"><pre><font color="#FF0000" size="2" face="Courier New, Courier, mono">&gt;round(distance, 4)</font>                                                                
+       P00A   P00B   M02A   M02B   P04A   P04B   M06A   M06B   P08A   P08B   M10A
+P00B 0.9678                                                                      
+M02A 1.0054 1.0349                                                               
+M02B 1.0258 1.0052 1.2106                                                        
+P04A 1.0247 0.9928 1.0145 0.9260                                                 
+P04B 0.9898 0.9769 0.9875 0.9855 0.6075                                          
+M06A 1.0159 0.9893 1.0175 0.9521 0.9266 0.9660                                   
+M06B 0.9837 0.9912 1.0124 1.0402 1.0272 1.0367 1.5693                            
+P08A 1.0279 1.0303 0.9865 0.9748 1.0184 1.0452 0.9799 1.0400                     
+P08B 1.0248 1.0299 0.9717 0.9673 1.0048 1.0329 1.0280 0.9907 0.2158              
+M10A 0.9850 0.9603 1.0246 0.9708 1.0231 0.9771 0.9916 1.0168 0.9722 0.9525       
+M10B 1.0150 1.0397 0.9754 1.0292 0.9769 1.0229 1.0084 0.9832 1.0278 1.0475 2.0000</pre></td>
+    </tr>
+  </tbody></table>
+  <p></p>
+  <table width="600" align="center" cellpadding="1" cellspacing="1">
+    <tbody><tr>
+      <td><p>The hierarchical clustering function, <font size="2" face="Courier New, Courier, mono">hclust</font>, expects a dissimilarity matrix.&nbsp; The plot function knows how to plot a dendrogram from <font size="2" face="Courier New, Courier, mono">hclust</font>'s result </p>
+        <blockquote>
+          <p><font size="2" face="Courier New, Courier, mono">plot(hclust(distance), <br>
+&nbsp;&nbsp;&nbsp;&nbsp; main="Dissimilarity = 1 - Correlation", xlab="") </font></p>
+        </blockquote>        
+        <p>The results for this simple dissimilarity index are not good.&nbsp; In particular, the values with a correlation of -1.0 are grouped incorrectly (M10B with M02A, and M10A with P00B).</p>
+        </td></tr>
+  </tbody></table>
+  <p align="center"><img src="./Correlation _Distances_ with Hierarchical Clustering_files/cor-clust002.png" width="458" height="380" border="1"></p>
+  <p align="center" class="MsoNormal">&nbsp;</p>
+  <table width="600" align="center" cellpadding="1" cellspacing="1">
+    <tbody><tr>
+      <td><p>As expected, the second method only changed the scaling and did not affect the clusters:</p>
+    </td></tr>
+  </tbody></table>
+  <p align="center" class="MsoNormal">&nbsp;</p>
+  <p align="center" class="MsoNormal"><img src="./Correlation _Distances_ with Hierarchical Clustering_files/cor-clust003.png" width="448" height="392" border="1"></p>
+  <table width="600" align="center" cellpadding="1" cellspacing="1">
+    <tbody><tr>
+      <td><p>&nbsp;<br>
+        The dissimilarity measure <font size="2" face="Courier New, Courier, mono">1-Abs(Correlation)</font> worked well to discriminate all correlated pairs. In addition, pairs with "stronger" correlation were ordered correctly from the bottom (abs(correlation) =1.0) to the top (correlation = 0.0), almost linearly with their correlation values.&nbsp; All correlated values were paired correctly from abs(correction) 0.2 to 1.0.&nbsp; The values that were not correlated, P00A and P00B were not grouped together, but that is expected. </p>
+    </td></tr>
+  </tbody></table>
+  <p align="center" class="MsoNormal">&nbsp;</p>
+  <p align="center" class="MsoNormal"><img src="./Correlation _Distances_ with Hierarchical Clustering_files/cor-clust004.png" width="447" height="389" border="1"></p>
+  <table width="600" align="center" cellpadding="1" cellspacing="1">
+    <tbody><tr>
+      <td><p>&nbsp;<br>
+        The final dissimilarity measure, <font size="2" face="Courier New, Courier, mono">Sqrt(1-Correlation<sup>2</sup>)</font>, worked well also, but narrowed the vertical spread shown in the diagram.&nbsp; This method might be better when only a small number of highly correlated clusters are desired.&nbsp; Many clusters that are resolved a bit better in the method shown above, are not as resolvable in this diagram:</p>
+    </td></tr>
+  </tbody></table>
+  <p class="MsoNormal">&nbsp;</p>
+  <p align="center" class="MsoNormal"><img src="./Correlation _Distances_ with Hierarchical Clustering_files/cor-clust005.png" width="443" height="385" border="1"></p>
+  <p align="center" class="MsoNormal">&nbsp;</p>
+  <table width="600" align="center" cellpadding="1" cellspacing="1">
+    <tbody><tr>
+      <td><p>The R <a href="http://cran.r-project.org/doc/packages/cluster.pdf">cluster package</a> provides an alternative "agnes" function <strong>(ag</strong>glomerative <strong>nes</strong>ting) for plotting dendrograms: </p>
+        <blockquote>
+          <p><font size="2" face="Courier New, Courier, mono">library(cluster)<br>
+            plot(agnes(distance))</font></p>
+        </blockquote>        
+        <p>"agnes" can work with a dissimilarity matrix, like hclust, or can manipulate raw data directly if the the parameter diss = FALSE.</p>
+        <p>The "banner" plot is explained under <font size="2" face="Courier New, Courier, mono">?plot.agnes</font>:</p>
+        <blockquote>
+          <p> <em>The banner displays the hierarchy of clusters, and is equivalent to a tree .... The banner plots distances at which observations 
+  and clusters are merged. The&nbsp; observations are listed in the order found by the 'agnes' algorithm, and the numbers in the 'height' vector are represented as bars between the observations.</em></p>
+          <p><em> The leaves of the clustering tree are the original observations. 
+      Two branches come together at the distance between the two clusters being merged.</em>          </p>
+        </blockquote>        
+        <p>The agglomerative coefficient is explained under <font size="2" face="Courier New, Courier, mono">?agnes.object</font>:</p>
+        <blockquote>
+          <p> <em>ac: the agglomerative coefficient, measuring the clustering structure of the dataset.</em></p>
+          <p><em> For each observation i, denote by m(i) its dissimilarity to 
+      the first cluster it is merged with, divided by the 
+      dissimilarity of the merger in the final step of the 
+      algorithm. The 'ac' is the average of all 1 - m(i). It can 
+      also be seen as the average width (or the percentage filled) 
+      of the banner plot. Because 'ac' grows with the number of observations, this measure should not be used to compare datasets of very different sizes. </em>          </p>
+        </blockquote>        
+        <p>The usefulness of the agglomerative coefficient is not clear from this  brief exercise. </p>
+    </td></tr>
+  </tbody></table>
+  <p align="center" class="MsoNormal">&nbsp;</p>
+  <p align="center" class="MsoNormal"><img src="./Correlation _Distances_ with Hierarchical Clustering_files/cor-clust006.png" width="480" height="480" border="1"></p>
+  <p class="MsoNormal">&nbsp;</p>
+  <p class="MsoNormal">&nbsp;</p>
+  <p align="center" class="MsoNormal"><img src="./Correlation _Distances_ with Hierarchical Clustering_files/cor-clust007.png" width="480" height="480" border="1"></p>
+  <p class="MsoNormal">&nbsp;</p>
+  <table width="600" align="center" cellpadding="1" cellspacing="1">
+    <tbody><tr>
+      <td><p>The dendrograms from <font size="2" face="Courier New, Courier, mono">hclust</font> and  <font size="2" face="Courier New, Courier, mono">agnes</font> look similar but are slightly different.&nbsp; There is no single "correct assignment" of the order of the clustered objects.&nbsp; While <font size="2" face="Courier New, Courier, mono">agnes</font> put the two "random" variables together (P00A and P00B), <font size="2" face="Courier New, Courier, mono">hclust</font> randomly associated them as being "closer" to other clusters.&nbsp; The "pvclust" package below tries to improve on this by assigning probabilities to the various clusters. </p>
+        <p>In addition to <font size="2" face="Courier New, Courier, mono">agnes</font>, the R "cluster" package provides an alternative "pam" (partitioning around medoids) function for partitioning the data.&nbsp; For example: </p>
+        <blockquote>
+          <p><font size="2" face="Courier New, Courier, mono">          plot( pam(distance, 6)) <br>
+            <br>
+          </font></p>
+        </blockquote>
+      </td></tr>
+  </tbody></table>
+  <p class="MsoNormal">&nbsp;</p>
+  <p align="center" class="MsoNormal"><img src="./Correlation _Distances_ with Hierarchical Clustering_files/cor-clust009.png" width="480" height="480" border="1"></p>
+  <p align="center" class="MsoNormal">&nbsp;</p>
+  <table width="600" align="center" cellpadding="1" cellspacing="1">
+    <tbody><tr>
+      <td><p>See <font size="2" face="Courier New, Courier, mono">?pam.object</font> for details.</p>
+        <p>Yet another hierarchical clustering alternative is provided by the <a href="http://cran.r-project.org/src/contrib/Descriptions/Hmisc.html">Hmisc package</a>:</p>
+        <blockquote>
+          <p><font size="2" face="Courier New, Courier, mono">library(Hmisc)</font></p>
+          <p><font size="2" face="Courier New, Courier, mono">plot( varclus(Raw, similarity="spearman") )<br>
+  plot( varclus(Raw, similarity="pearson") )</font></p>
+          </blockquote>        
+      </td></tr>
+  </tbody></table>
+  <p align="center" class="MsoNormal">&nbsp;</p>
+  <p align="center" class="MsoNormal"><img src="./Correlation _Distances_ with Hierarchical Clustering_files/cor-clust010.png" width="444" height="350" border="1"></p>
+  <p align="center" class="MsoNormal">&nbsp;</p>
+  <p align="center" class="MsoNormal">&nbsp;</p>
+  <p align="center" class="MsoNormal"><img src="./Correlation _Distances_ with Hierarchical Clustering_files/cor-clust011.png" width="444" height="332" border="1"></p>
+  <p class="MsoNormal">&nbsp;</p>
+  <table width="644" align="center" cellpadding="1" cellspacing="1">
+    <tbody><tr>
+      <td width="638"><p>The results of the <font size="2" face="Courier New, Courier, mono">Hmisc varclus</font> function are rougly similar to the results from hclust with a dissimilarity measure <font size="2" face="Courier New, Courier, mono">1-Abs(Correlation)</font><font face="Courier New, Courier, mono">.</font></p>
+        <p>Finally, the dendrogram option from the <a href="http://www.is.titech.ac.jp/~shimo/prog/pvclust/">pvclust</a><a href="http://cran.r-project.org/doc/packages/pvclust.pdf"> package</a> was considered (see <a href="http://www.jsbi.org/journal/GIW04/GIW04P034.pdf">paper</a> or <a href="http://www.is.titech.ac.jp/~shimo/pub/GIW2004/suzuki-GIW2004.pdf">poster</a>). The package helps assess the uncertainty in hierarchical cluster analysis by calculating p-values. </p>
+        <blockquote>
+          <p><font size="2" face="Courier New, Courier, mono">library(pvclust)</font></p>
+          <p><font size="2" face="Courier New, Courier, mono">cluster.bootstrap &lt;- pvclust(Raw, nboot=1000, method.dist="abscor")<br>
+            plot(cluster.bootstrap)<br>
+          pvrect(cluster.bootstrap) </font></p>
+        </blockquote>
+      </td></tr>
+  </tbody></table>
+  <p class="MsoNormal">&nbsp;</p>
+  <p class="MsoNormal">&nbsp;</p>
+  <p align="center" class="MsoNormal"><img src="./Correlation _Distances_ with Hierarchical Clustering_files/cor-clust012.png" width="480" height="480" border="1"></p>
+  <p align="center" class="MsoNormal">&nbsp;</p>
+  <table width="644" align="center" cellpadding="1" cellspacing="1">
+    <tbody><tr>
+      <td width="638"><p>The <a href="http://www.is.titech.ac.jp/~shimo/prog/pvclust/">pvclust site</a> gives this information about how to interpret the AU and BP p values above: </p>
+        <blockquote>
+          <p><font color="red"><b><em>pvclust</em></b></font><em> provides two types of p-values: <font color="red"><b>AU</b></font> (<font color="red"><b>A</b></font>pproximately <font color="red"><b>U</b></font>nbiased) p-value and <font color="green"><b>BP</b></font> (<font color="green"><b>B</b></font>ootstrap <font color="green"><b>P</b></font>robability) value. <font color="red"><b>AU</b></font> p-value, which is computed by multiscale bootstrap resampling, is a better approximation to unbiased p-value than <font color="green"><b>BP</b></font> value computed by normal bootstrap resampling. </em></p>
+        </blockquote>        
+        <p>The pvrect function can be used to automatically highlight significant clusters.</p>
+        <p>The dendrogram above was created using the "abscor" method, i.e., the dissimilarity measure <font size="2" face="Courier New, Courier, mono">1-Abs(Correlation)</font>.&nbsp; If the simpler "correlation" method is used, only two clusters are found to be significant:</p>
+        <blockquote>
+          <p><font size="2" face="Courier New, Courier, mono"># Default "correlation" methods does not work well here<br>
+      cluster.bootstrap &lt;- pvclust(Raw, nboot=1000,<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; method.dist="correlation")<br>
+            plot(cluster.bootstrap)<br>
+          pvrect(cluster.bootstrap) </font></p>
+        </blockquote>        </td></tr>
+  </tbody></table>
+  <p align="center" class="MsoNormal">&nbsp;</p>
+  <p align="center" class="MsoNormal">&nbsp;</p>
+  <p align="center" class="MsoNormal"><img src="./Correlation _Distances_ with Hierarchical Clustering_files/cor-clust013.png" width="480" height="480" border="1"></p>
+  <p class="MsoNormal">&nbsp;</p>
+  <table width="600" align="center" cellpadding="1" cellspacing="1">
+    <tbody><tr>
+      <td><p><strong>Conclusions</strong><br>
+        The dissimilarity measure, <font size="2" face="Courier New, Courier, mono">1-Abs(Correlation)</font>, seems to work best if correlation values can be either positive or negative.&nbsp; Only in the case of positive-only correlations should a simpler dissimilarity measure, <font size="2" face="Courier New, Courier, mono">1-Correlation</font>, be used. </p>
+        <p>Dendrograms for the same data can be presented in a vareity of ways.&nbsp; The computational-intensive bootstrap procedure is useful to assess the uncertainty in hierarchical clustering.</p>
+        <hr>
+        <p><strong>Download</strong>:&nbsp; <a href="http://research.stowers.org/mcm/efg/R/Visualization/cor-cluster/cor-clust.R">R code to reproduce the above figues</a></p>
+        <hr>
+    </td></tr>
+  </tbody></table>
+  
+
+  
+  
+<p align="center" class="MsoNormal">Updated<br>
+  29 Dec  2005
+</p>
+<p align="center" class="MsoNormal">&nbsp;</p>
+<p align="center" class="MsoNormal"><img src="./Correlation _Distances_ with Hierarchical Clustering_files/count.pl.download"></p>
+</div>
+
+
+
+
+</body></html>
