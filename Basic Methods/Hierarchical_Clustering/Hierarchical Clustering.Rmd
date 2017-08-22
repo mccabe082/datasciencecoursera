@@ -5,21 +5,24 @@ date: "16 August 2017"
 output: html_document
 ---
 
-- An agglomerative approach
--- Find closest two points
--- Pair them together
--- Repeat...
+**An agglomerative approach**
 
-- Requires
-- - Defined distance metric
-- - - [geometric](https://en.wikipedia.org/wiki/Euclidean_distance)
-- - - [similarity](https://en.wikipedia.org/wiki/Pearson_correlation_coefficient)
-- - - [binary](https://en.wikipedia.org/wiki/Taxicab_geometry)
-- - A merging approach
-- - - Averaging - take the midpoint/centroid
-- - - Complete - take the distance between the farthest pair in each cluster
-- Produces
--- A tree showing the mutual proximity of all the points
+Sucessively pair point to create a binary tree.
+
+    1. Find closest two points
+    2. Pair them together
+    3. Repeat...
+        
+**Requires**
+
+  i) Defined distance metric
+      + [geometric separation](https://en.wikipedia.org/wiki/Euclidean_distance)
+      + [similarity separation](https://en.wikipedia.org/wiki/Pearson_correlation_coefficient)
+      + [binary separation](https://en.wikipedia.org/wiki/Taxicab_geometry)
+  ii) A merging approach
+      + Averaging - take the midpoint/centroid
+      + Complete - take the distance between the farthest pair in each cluster
+
 
 ```{r}
 set.seed(71675)

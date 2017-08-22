@@ -1,20 +1,15 @@
----
-title: "Course Project 1"
-author: "D.McCabe"
-output:
-  html_document: 
-    keep_md: yes
-  pdf_document: default
----
+# Course Project 1
+D.McCabe  
 
 
 
 # Introduction
 
 
-This report uses [activity monitoring data](https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip) taken at (`r as.character(as.POSIXlt(Sys.Date()))`).
+This report uses [activity monitoring data](https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip) taken at (2017-08-22).
 
-```{r}
+
+```r
 # prepare libraries etc...
 library(data.table)
 set.seed(71675)
@@ -53,7 +48,6 @@ clocktime<-function(datetime){
     format = "%H-%M"
   )
 }
-
 ```
 
 
@@ -64,19 +58,18 @@ clocktime<-function(datetime){
 
 ### 1. Load the data (i.e. *read.csv()*)
 
-```{r}
 
+```r
 # will try using data.table for a change.
 data_raw<-fread(file="activity.csv")
-
 ```
 
 
 
 ### 2. Process/transform the data (if necessary) into a format suitable for your analysis
 
-```{r}
 
+```r
 # get the refined the raw data
 data_clean<-data_raw[       # Take the raw data...
   ,                         # for every row
@@ -90,7 +83,6 @@ data_clean<-data_raw[       # Take the raw data...
 ][
   order(time)               # Ensure chronological ordering - sanity check
 ]
-
 ```
 
 
@@ -98,8 +90,8 @@ data_clean<-data_raw[       # Take the raw data...
 
 ### 1. Calculate the total number of steps taken per day
 
-```{r}
 
+```r
 # use helper function to get step totals for each day
 step_total<-data_clean[           # Take data_clean...
   !is.na(steps),                  # exclude any missing observations
@@ -108,33 +100,14 @@ step_total<-data_clean[           # Take data_clean...
   ),  
   .(date = as.Date(time))         # for each date (year day)
 ]
-
 ```
-```{r, echo=FALSE}
-# plot the total daily steps for each year day
-plot(
-  x=step_total$date,
-  xlab = "Observation Date",
-  y=step_total$steps,
-  ylab = "Recorded Steps",
-  type = "h",
-  col="red",
-  lwd=2.
-)
-points(
-  x=step_total$date,
-  y=step_total$steps,
-  pch=16,
-  col="blue"
-)
-
-```
+![](course-project-1_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
 
 
 ### 2. Make a histogram of the total number of steps taken each day
 
-```{r}
 
+```r
 # print a simple histogram to the graphics device
 hist(
   step_total$steps,
@@ -143,13 +116,14 @@ hist(
   main = "Daily Step Totals",
   xlab = "No. steps recorded"
 )
-
 ```
+
+![](course-project-1_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
 
 ### 3. Calculate and report the mean and median of the total number of steps taken per day
 
-```{r}
 
+```r
 # calculate the number of steps for each day
 step_total[
   ,                        # for all observations
@@ -158,7 +132,11 @@ step_total[
     median=median(steps)   # calculate the median steps
   )
 ]
+```
 
+```
+##        mean median
+## 1: 10374.69  10600
 ```
 
 
@@ -168,8 +146,8 @@ step_total[
 
 ### 1. Make a time series plot (i.e.*type = "l"*) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
-```{r}
 
+```r
 # get average activity dsta
 activity_data<-data_clean[
   !is.na(steps),                     # excluding missing data
@@ -186,10 +164,10 @@ activity_data<-data_clean[
     clocktime                        # - time of day
   )      
 ]
-
 ```
 
-```{r}
+
+```r
 # plot activity
 plot(
   x=activity_data$clocktime,
@@ -203,9 +181,16 @@ plot(
 )
 ```
 
+![](course-project-1_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
+
 ### 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
-```{r}
+
+```r
 activity_data[which.max(mean_steps),]$clocktime
+```
+
+```
+## [1] "2017-08-22 08:35:00 BST"
 ```
 
 
@@ -214,8 +199,13 @@ activity_data[which.max(mean_steps),]$clocktime
 
 ### 1. Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with *NA*s)
 
-```{r}
+
+```r
 data_clean[is.na(steps),.N]
+```
+
+```
+## [1] 2304
 ```
 
 ### 2. Devise a strategy for filling in all of the missing values in the dataset.
@@ -224,8 +214,8 @@ Previously any observations that were missing data were used removed before calc
 
 ###3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
 
-```{r}
 
+```r
 # imput function returns specified steps or mean daily steps for NA
 imput<-function(steps,time){
   
@@ -245,13 +235,12 @@ data_imputted<-data_clean[
    steps=imput(steps,time)
  )
 ]
-
 ```
 
 Now with the NA's replaced by reasonable values we can plot the data.
 
-```{r}
 
+```r
 plot(
   x=data_imputted$time,
   y=data_imputted$steps,
@@ -267,14 +256,15 @@ lines(
   type="l",
   col="red"
 )
-
 ```
+
+![](course-project-1_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
 
 ###4 Make a histogram of the total number of steps taken each day and Calculate and report the *mean* and *median* total number of steps taken per day
 
 
-```{r}
 
+```r
 imputted_step_total<-data_imputted[
   ,
   .(steps=sum(steps)),
@@ -289,13 +279,14 @@ hist(
   main = "Daily Step Totals",
   xlab = "No. steps inferred"
 )
-
 ```
+
+![](course-project-1_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
 
 ### 3. Calculate and report the mean and median of the total number of steps taken per day
 
-```{r}
 
+```r
 # calculate the number of steps for each day
 imputted_step_total[
   ,                        # for all observations
@@ -304,7 +295,11 @@ imputted_step_total[
     median=median(steps)   # calculate the median steps
   )
 ]
+```
 
+```
+##        mean   median
+## 1: 10766.19 10766.19
 ```
 
 The mean and median for the clean data are 10374.69 and 10600 respectively.
@@ -315,8 +310,8 @@ The imputting operation has changed the values. By chance the mean and median ar
 
 ### 1. Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
 
-```{r}
 
+```r
 # tag observations with logical specifying if they occur on a weekend
 data_tagged<-data_imputted[
   ,
@@ -327,10 +322,20 @@ data_tagged<-data_imputted[
 summary(data_tagged)
 ```
 
+```
+##   weekend             time                         steps       
+##  Mode :logical   Min.   :2012-10-01 00:00:00   Min.   :  0.00  
+##  FALSE:12960     1st Qu.:2012-10-16 05:58:45   1st Qu.:  0.00  
+##  TRUE :4608      Median :2012-10-31 11:57:30   Median :  0.00  
+##  NA's :0         Mean   :2012-10-31 11:30:52   Mean   : 37.38  
+##                  3rd Qu.:2012-11-15 17:56:15   3rd Qu.: 27.00  
+##                  Max.   :2012-11-30 23:55:00   Max.   :806.00
+```
+
 ### 2.  Make a panel plot containing a time series plot (i.e.*type = "l"*) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
 
-```{r}
 
+```r
 daycategory<-function(weekend_flag){
   if(weekend_flag){return("weekend")}
   else{return("weekday")}
@@ -346,6 +351,19 @@ activity_data_tagged<-data_tagged[
 ]
 
 summary(activity_data_tagged)
+```
+
+```
+##       time                      daycategory      steps        
+##  Min.   :2017-08-22 00:00:00   weekday:288   Min.   :  0.000  
+##  1st Qu.:2017-08-22 05:58:45   weekend:288   1st Qu.:  2.047  
+##  Median :2017-08-22 11:57:30                 Median : 28.133  
+##  Mean   :2017-08-22 11:57:30                 Mean   : 38.988  
+##  3rd Qu.:2017-08-22 17:56:15                 3rd Qu.: 61.263  
+##  Max.   :2017-08-22 23:55:00                 Max.   :230.378
+```
+
+```r
 library(lattice)
 
 xyplot(
@@ -357,3 +375,5 @@ xyplot(
   type = "l"
 )
 ```
+
+![](course-project-1_files/figure-html/unnamed-chunk-17-1.png)<!-- -->

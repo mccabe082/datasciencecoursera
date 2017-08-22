@@ -124,42 +124,26 @@ $(document).ready(function () {
 </div>
 
 
+<p><strong>An agglomerative approach</strong></p>
+<p>Sucessively pair point to create a binary tree.</p>
+<pre><code>1. Find closest two points
+2. Pair them together
+3. Repeat...
+    </code></pre>
+<p><strong>Requires</strong></p>
+<ol style="list-style-type: lower-roman">
+<li>Defined distance metric
 <ul>
-<li><p>An agglomerative approach – Find closest two points – Pair them together – Repeat…</p></li>
-<li>Requires</li>
-<li><ul>
-<li>Defined distance metric</li>
+<li><a href="https://en.wikipedia.org/wiki/Euclidean_distance">geometric separation</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Pearson_correlation_coefficient">similarity separation</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Taxicab_geometry">binary separation</a></li>
 </ul></li>
-<li><ul>
-<li><ul>
-<li><a href="https://en.wikipedia.org/wiki/Euclidean_distance">geometric</a></li>
-</ul></li>
-</ul></li>
-<li><ul>
-<li><ul>
-<li><a href="https://en.wikipedia.org/wiki/Pearson_correlation_coefficient">similarity</a></li>
-</ul></li>
-</ul></li>
-<li><ul>
-<li><ul>
-<li><a href="https://en.wikipedia.org/wiki/Taxicab_geometry">binary</a></li>
-</ul></li>
-</ul></li>
-<li><ul>
-<li>A merging approach</li>
-</ul></li>
-<li><ul>
-<li><ul>
+<li>A merging approach
+<ul>
 <li>Averaging - take the midpoint/centroid</li>
-</ul></li>
-</ul></li>
-<li><ul>
-<li><ul>
 <li>Complete - take the distance between the farthest pair in each cluster</li>
 </ul></li>
-</ul></li>
-<li><p>Produces – A tree showing the mutual proximity of all the points</p></li>
-</ul>
+</ol>
 <pre class="r"><code>set.seed(71675)
 par(mar=c(0,0,0,0))
 x&lt;-rnorm(12,mean=rep(1:3,each = 4), sd = 0.2)
