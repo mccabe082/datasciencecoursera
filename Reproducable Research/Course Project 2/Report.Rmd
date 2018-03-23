@@ -1,0 +1,106 @@
+---
+title: Study To Establishing Which Extreme U.S. Weather Events Have BeenResponsible For The Highest Humanitarian and Economic Loses
+author: "D.McCabe"
+date: "27 September 2017"
+output: html_document
+---
+
+
+## Synopsis
+
+[survivorship bias](https://en.wikipedia.org/wiki/Survivorship_bias)
+[texas sharpshooter](https://en.wikipedia.org/wiki/Texas_sharpshooter_fallacy)
+
+summarize analysis in less than 10 sentences
+Three part analysis
+- type(s) of event that cause the greatest harm to human health (how that was reached)
+- type(s) of event that cause the greatest economic losses (how that was reached)
+- observe correlations??
+- what do the results suggest?
+- where there any issues with the quality of the data? Any further investigations before conclusive comments?
+
+
+
+## Data Processing
+- source of data, need to seek from Url unzip ...
+- the data was procured from ... on ...
+```{r,echo=FALSE}
+library(tidyr)
+library(ggplot2)
+library(data.table)
+library(scales)
+
+# perform data munging
+source("data_munging.R")
+```
+
+Occurance
+```{r}
+
+# display top 10s
+{
+  # Top 10 Fatalities
+  fatalities_by_weather_event<-dt[
+    as.integer(year(BGN_TIME))>1994,
+    .(
+      TOT_FATALITIES=sum(FATALITIES),
+      AVE_FATALITIES=mean(FATALITIES),
+      SD_FATALITIES=sd(FATALITIES)
+    ),
+    EVTYPE
+  ][order(-TOT_FATALITIES,-AVE_FATALITIES)]
+  
+  head(fatalities_by_weather_event,3)
+  
+  # Top 10 Injuries
+  injuries_by_weather_event<-dt[
+    as.integer(year(BGN_TIME))>1994,
+    .(
+      TOT_INJURIES=sum(INJURIES),
+      AVE_INJURIES=mean(INJURIES),
+      SD_INJURIES=sd(INJURIES)
+    ),
+    EVTYPE
+  ][order(-TOT_INJURIES,-AVE_INJURIES)]
+  
+  head(injuries_by_weather_event,3)
+}
+
+```
+
+
+```{r}
+
+# display top 10s
+{
+  # Top 10 Fatalities
+  fatalities_by_weather_event<-dt[
+    ,
+    .(
+      TOT_FATALITIES=sum(FATALITIES),
+      AVE_FATALITIES=mean(FATALITIES),
+      SD_FATALITIES=sd(FATALITIES)
+    ),
+    EVTYPE
+  ][order(-TOT_FATALITIES,-AVE_FATALITIES)]
+  
+  head(fatalities_by_weather_event,3)
+  
+  # Top 10 Injuries
+  injuries_by_weather_event<-dt[
+    ,
+    .(
+      TOT_INJURIES=sum(INJURIES),
+      AVE_INJURIES=mean(INJURIES),
+      SD_INJURIES=sd(INJURIES)
+    ),
+    EVTYPE
+  ][order(-TOT_INJURIES,-AVE_INJURIES)]
+  
+  head(injuries_by_weather_event,3)
+}
+
+```
+
+## Results
+- 3 graphs or less

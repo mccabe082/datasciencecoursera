@@ -1,0 +1,60 @@
+---
+title: 'data.table: Concatenation'
+author: "D.McCabe"
+date: "23 March 2018"
+output: html_document
+---
+
+# Introduction
+
+The following is a brief introduction to combining data.tables.  In the examples I'll use a subset from a data.gov.uk dataset. The values in the table correspond to the proportion of large fish (equal to or larger than 40cm), by weight, in the northern North Sea.
+```{r setup}
+library(data.table)
+
+dt<-fread(
+ input="http://data.defra.gov.uk/env/wdfg21_mar_eco_200904.csv"
+ ,header=T
+ ,skip=2
+ ,nrows=27
+ ,na.strings="-"
+ ,drop=c(4,5,6)
+)
+dt<-dt[complete.cases(dt)]
+head(dt)
+```
+
+
+# Combining Columns
+
+To illustrate column merging we'll first break the data up by fish type then later recombine it to illustrate the merge
+```{r column_splitting}
+northern<-dt[,.(Year,`Northern North Sea`)]
+southern<-dt[,.(Year,`Southern North Sea`)]
+```
+
+Next we'll recombine the data.tables using the Year column as a key to match rows.
+```{r column_merging}
+  colmerge<-merge(
+    x = northern,
+    y = southern,
+    by = c('Year')
+  )
+  head(colmerge)
+```
+
+
+# Combining Rows
+
+To illustrate row merging we'll first break the data up by year before recombine it.
+```{r row_splitting}
+pre2000<-dt[Year<2000]
+year2000<-dt[Year==2000]
+post2000<-dt[Year>2000]
+```
+
+To recombine these data.tables we can group them in a list then use the rbindlist to join them together.
+```{r row_merging}
+rowmerge<-rbindlist(list(post2000,pre2000,year2000),fill=T)
+rowmerge<-rowmerge[order(Year)] # ensure correct row order if desired
+print(rowmerge)
+```
