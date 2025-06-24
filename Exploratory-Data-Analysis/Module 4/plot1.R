@@ -27,7 +27,7 @@ totals <- NEI[, .(Total_Emissions = sum(Emissions)), by = year]
 
 png(filename = "plot1.png", width = 800, height = 600)
 barplot(
-  totals$Total_Emissions / 10^6,           # convert to millions
+  totals$Total_Emissions,           # convert to millions
   names.arg = totals$year,                # labels
   col = "steelblue",
   xlab = "Year",

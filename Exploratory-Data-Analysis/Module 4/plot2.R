@@ -26,12 +26,15 @@ SCC <- as.data.table(readRDS("exdata_data_NEI_data/Source_Classification_Code.rd
 totals <- NEI[fips == "24510", .(Total_Emissions = sum(Emissions)), by = year]
 
 png(filename = "plot2.png", width = 800, height = 600)
-barplot(
-  totals$Total_Emissions / 10^6,           # convert to millions
-  names.arg = totals$year,                # labels
-  col = "steelblue",
-  xlab = "Year",
-  ylab = "Total PM2.5 Emissions (millions of tons)",
-  main = "Total PM2.5 Emissions in Baltimore City, Maryland (1999–2008)"
-)
+plot(totals$year, totals$Total_Emissions,
+     pch = 19, col = "steelblue",
+     xlab = "Year",
+     ylab = "Total PM2.5 Emissions (millions of tons)",
+     main = "Total PM2.5 Emissions in Baltimore City, Maryland (1999–2008)",
+     type = "p")
+
+fit <- lm((totals$Total_Emissions) ~ totals$year)
+
+# Add trend line
+abline(fit, col = "steelblue", lwd = 2, lty = 1)
 dev.off()
