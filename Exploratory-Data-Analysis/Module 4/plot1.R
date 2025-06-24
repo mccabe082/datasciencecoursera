@@ -16,13 +16,24 @@ if (!dir.exists("exdata_data_NEI_data.zip")) {
 library(data.table)
 NEI <- as.data.table(readRDS("exdata_data_NEI_data/summarySCC_PM25.rds"))
 SCC <- as.data.table(readRDS("exdata_data_NEI_data/Source_Classification_Code.rds"))
-
-head(NEI)
-head(SCC)
-
+# head(NEI)
+# head(SCC)
 
 
 
-# Question 1)
+
+# Question 2)
+totals <- NEI[, .(Total_Emissions = sum(Emissions)), by = year]
+
+png(filename = "plot1.png", width = 800, height = 600)
+barplot(
+  totals$Total_Emissions / 10^6,           # convert to millions
+  names.arg = totals$year,                # labels
+  col = "steelblue",
+  xlab = "Year",
+  ylab = "Total PM2.5 Emissions (millions of tons)",
+  main = "Decrease in Total PM2.5 Emissions in the US (1999–2008)"
+)
+dev.off()
 
 
