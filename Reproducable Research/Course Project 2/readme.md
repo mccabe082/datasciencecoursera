@@ -15,9 +15,12 @@ which types of events have the greatest economic consequences?
 which types of events hqve produced the most reported fatalities overall and in laters years?
 which types of events have the largest reported cost overall and in later years?
 
-## Datascience Question (refined)
+## Datascience Question (refined/needs clarification w/stakeholder)
 
-TODO based on available data
+which types of events hqve produced the most reported fatalities (sum of *direct*, *indirect* and *delayed*) overall and in laters years?
+which instance led to the greatest reported fatalities - what type was it?
+which types of events have the largest reported cost (*private* and *public*) overall and in later years?
+
 
 # File Structure
 
