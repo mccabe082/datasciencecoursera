@@ -22,6 +22,14 @@ ggplot(ave_fatal_by_event, aes(x = reorder(EVTYPE, -AverageFatalities), y = Aver
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
+med_fatal_by_event <- storm_data[FATALITIES > 0][, .(MedianFatalities = median(FATALITIES)), by = EVTYPE][MedianFatalities > 1]
+ggplot(med_fatal_by_event, aes(x = reorder(EVTYPE, -MedianFatalities), y = MedianFatalities)) +
+  geom_bar(stat = "identity", fill = "tomato") +
+  labs(title = "Median Fatalities per Event Type (ignoring non-fatal event instances)",
+       x = "Event Type", y = "Average Fatalities") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
 
 ################################################################################
 # closer look a total deaths in event types which have killed more than 100 people over the period
@@ -52,5 +60,3 @@ ggplot(fatal_events[REFNUM!=198690], aes(x = reorder(EVTYPE, -FATALITIES, FUN = 
        x = "Event Type", y = "Fatalities per Incident (log scale)") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-
