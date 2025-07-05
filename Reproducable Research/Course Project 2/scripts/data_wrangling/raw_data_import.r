@@ -12,3 +12,6 @@ download.file(
 
 storm_data <- fread("StormData.csv.bz2")
 
+summary(storm_data)
+
+storm_data[, (c("EVTYPE")) := lapply(.SD, as.factor), .SDcols = c("EVTYPE")]
