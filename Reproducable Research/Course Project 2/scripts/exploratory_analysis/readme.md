@@ -34,3 +34,5 @@
       3. the multivariate nature of fatilities - "deadliness" of each event is dependent on background/context - e.g. storms over a populace area as opposed to a remote or rural area.
    
 2. Cost
+   1. We have property and crop damage - crop damage is neglegible relative to property damage
+   2. 

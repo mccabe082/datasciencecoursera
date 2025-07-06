@@ -15,3 +15,19 @@ storm_data <- fread("StormData.csv.bz2")
 summary(storm_data)
 
 storm_data[, (c("EVTYPE")) := lapply(.SD, as.factor), .SDcols = c("EVTYPE")]
+
+
+####################################################
+# alphabetical characters used to signify magnitude
+# should be entered as actual dollar amounts,
+# include “K” for thousands, “M” for millions, and “B” for billions
+actual_dollar_amount <- function(DMG, DMGEXP) {
+  multipliers <- c("K" = 1e3, "M" = 1e6, "B" = 1e9)
+  factor <- multipliers[as.character(DMGEXP)]
+  factor[is.na(factor)] <- 1
+  return (unname(DMG * factor))
+}
+
+
+storm_data[,PROPDMG:=actual_dollar_amount(PROPDMG,PROPDMGEXP)][,PROPDMGEXP=NULL]
+storm_data[,CROPDMG:=actual_dollar_amount(CROPDMG,CROPDMGEXP)][,CROPDMGEXP=NULL]

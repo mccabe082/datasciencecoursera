@@ -3,6 +3,7 @@ source(file.path(this_dir, "../data_wrangling/raw_data_import.r"))
 
 library(ggplot2)
 
+# plot 1: plotting events
 ggplot(storm_data[FATALITIES>0], aes(x = FATALITIES, y = INJURIES)) +
   geom_point(alpha = 0.3, color="steelblue") +
   xlim(0,50)+
@@ -14,6 +15,7 @@ ggplot(storm_data[FATALITIES>0], aes(x = FATALITIES, y = INJURIES)) +
   theme_minimal()
 
 
+# plot 2: plotting event types
 ggplot(
   storm_data[,.(total_fatalities=sum(FATALITIES), total_injuries=sum(INJURIES)),by=.(EVTYPE)],
   aes(x = total_fatalities, y = total_injuries)) +
