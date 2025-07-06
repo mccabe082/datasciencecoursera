@@ -16,6 +16,7 @@ summary(storm_data)
 
 storm_data[, (c("EVTYPE")) := lapply(.SD, as.factor), .SDcols = c("EVTYPE")]
 
+levels(storm_data$EVTYPE)
 
 ####################################################
 # alphabetical characters used to signify magnitude
