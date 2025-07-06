@@ -22,7 +22,7 @@ ggplot(ave_fatal_by_event, aes(x = reorder(EVTYPE, -AverageFatalities), y = Aver
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-med_fatal_by_event <- storm_data[FATALITIES > 0][, .(MedianFatalities = median(FATALITIES)), by = EVTYPE][MedianFatalities > 1]
+med_fatal_by_event <- storm_data[FATALITIES > 0][, .(MedianFatalities = median(FATALITIES)), by = EVTYPE][MedianFatalities > 2]
 ggplot(med_fatal_by_event, aes(x = reorder(EVTYPE, -MedianFatalities), y = MedianFatalities)) +
   geom_bar(stat = "identity", fill = "tomato") +
   labs(title = "Median Fatalities per Event Type (ignoring non-fatal event instances)",
@@ -48,15 +48,7 @@ ggplot(fatal_events, aes(x = reorder(EVTYPE, -FATALITIES, FUN = median), y = FAT
 # the is a heat event which has the maximum number of fatalities:
 # https://en.wikipedia.org/wiki/1995_Chicago_heat_wave
 # this is an extreme outlier with deaths being undereported and due to poverty in the local urban area:
-storm_data[FATALITIES==max(storm_data$FATALITIES),]$REMARKS
 storm_data[FATALITIES==max(storm_data$FATALITIES),]$REFNUM
 storm_data[REFNUM==198690,]$REMARKS
 
-# remove the chicago heat wave
-ggplot(fatal_events[REFNUM!=198690], aes(x = reorder(EVTYPE, -FATALITIES, FUN = median), y = FATALITIES)) +
-  geom_boxplot(fill = "skyblue") +
-  #scale_y_log10() +
-  labs(title = "Event Type",
-       x = "Event Type", y = "Fatalities per Incident (log scale)") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
