@@ -12,3 +12,16 @@ ggplot(storm_data[FATALITIES>0], aes(x = FATALITIES, y = INJURIES)) +
        y = "Injuries") +
   geom_smooth(method = "lm", se = TRUE, color = "red")+
   theme_minimal()
+
+
+ggplot(
+  storm_data[,.(total_fatalities=sum(FATALITIES), total_injuries=sum(INJURIES)),by=.(EVTYPE)],
+  aes(x = total_fatalities, y = total_injuries)) +
+  geom_point(alpha = 0.3, color="steelblue") +
+  xlim(0,40)+
+  ylim(0,200)+
+  labs(title = "Fatalities vs. Injuries per Event Type",
+       x = "Fatalities",
+       y = "Injuries") +
+  geom_smooth(method = "lm", se = TRUE, color = "red")+
+  theme_minimal()
