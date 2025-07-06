@@ -31,3 +31,14 @@ actual_dollar_amount <- function(DMG, DMGEXP) {
 
 storm_data[,PROPDMG:=actual_dollar_amount(PROPDMG,PROPDMGEXP)][,PROPDMGEXP=NULL]
 storm_data[,CROPDMG:=actual_dollar_amount(CROPDMG,CROPDMGEXP)][,CROPDMGEXP=NULL]
+
+
+####################
+# drop missing data
+storm_data[complete.cases(
+  storm_data$EVTYPE,
+  storm_data$FATALITIES,
+  storm_data$INJURIES,
+  storm_data$PROPDMG,
+  storm_data$CROPDMG
+), ]
