@@ -30,4 +30,10 @@ ggplot(long_costs, aes(x = reorder(EVTYPE,-total_cost), y = Cost/1e9, fill = Cos
 storm_data[PROPDMG==max(storm_data$PROPDMG),]$REFNUM
 storm_data[REFNUM==605943,]$REMARKS
 # this is a data entry error:
-# https://www.theatlantic.com/business/archive/2011/05/the-10-costliest-floods-in-american-history/239309/?utm_source=chatgpt.com
+# https://www.theatlantic.com/business/archive/2011/05/the-10-costliest-floods-in-american-history/239309/
+
+# Worst incident: Hurricane Katrina
+# https://en.wikipedia.org/wiki/Effects_of_Hurricane_Katrina_in_New_Orleans
+napa_ignored_data<-storm_data[REFNUM!=605943]
+napa_ignored_data[PROPDMG==max(napa_ignored_data$PROPDMG),]$REFNUM
+napa_ignored_data[REFNUM==577616,]$REMARKS

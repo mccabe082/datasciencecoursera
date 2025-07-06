@@ -36,5 +36,5 @@
    
 2. Cost
    1. We have property and crop damage - crop damage is neglegible relative to property damage
-   2. The 2005 napa floods costliest ever however this might be due to a data entry error
+   2. The 2005 napa floods costliest ever however this might be due to a data entry error with hurricane Katrina being the second worst reported incident
    3. The flood event type is responsible for most costs
