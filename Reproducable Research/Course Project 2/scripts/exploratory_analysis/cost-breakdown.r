@@ -24,3 +24,10 @@ ggplot(long_costs, aes(x = reorder(EVTYPE,-total_cost), y = Cost/1e9, fill = Cos
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = c(0.8, 0.8))
 
+
+# Worst incident:
+# https://napavalleyregister.com/news/local/severe-flooding-hits-napa-valley/article_ebee8598-a512-572a-baea-ca254758614f.html
+storm_data[PROPDMG==max(storm_data$PROPDMG),]$REFNUM
+storm_data[REFNUM==605943,]$REMARKS
+# this is a data entry error:
+# https://www.theatlantic.com/business/archive/2011/05/the-10-costliest-floods-in-american-history/239309/?utm_source=chatgpt.com
