@@ -26,6 +26,7 @@
          1. the deaths in some events go under-reported e.g. the 1995 chicago heatwave
          2. I supose some events involving no fatalities may go unreported
       3. the multivariate nature of fatilities - "deadliness" of each event is dependent on background/context - e.g. storms over a populace area as opposed to a remote or rural area.
+      4.  In the earlier years of the database there are generally fewer events recorded, most likely due to a lack of good records. More recent years should be considered more complete.
 
 1. Fatalities
    1. No data for direct vs indirect
